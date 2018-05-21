@@ -11,7 +11,6 @@ namespace LSQEx.Controllers
         public static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         protected override void OnException(ExceptionContext filterContext)
         {
-            var a = 5;
             if (filterContext.HttpContext.Request.IsAjaxRequest())
             {
                 //Return Json

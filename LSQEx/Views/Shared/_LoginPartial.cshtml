@@ -1,0 +1,40 @@
+﻿
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    //using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    //{
+    @Html.AntiForgeryToken()
+
+    <div class="nav navbar-nav navbar-right">
+        <div class="dropdown">
+            <div class="dropbtn IdentityName">@HttpContext.Current.User.Identity.Name@*@Session["LoggedFullName"]*@&#x25BE;</div>
+            <div class="dropdown-content">
+                @if (User.IsInRole("User"))
+                {
+
+                    @Html.ActionLink("Profile", "Profile", "Account", new { userName = HttpContext.Current.User.Identity.Name }, null)
+
+                }
+                else
+                {
+
+                    @Html.ActionLink("Profile", "Admin", "Account", new { userName = HttpContext.Current.User.Identity.Name }, null)
+
+                }
+                @Html.ActionLink("Logout", "Logout", "Account")
+            </div>
+        </div>
+
+        @*@Html.ActionLink("Hello Ashmit!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+
+    </div>
+}
+    @*}*@
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+
+    </ul>
+}

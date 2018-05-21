@@ -1,0 +1,29 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet">
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/LSQExpress.css" rel="stylesheet" />
+    <title>Error</title>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="~/Content/img/doh.jpg" />
+        </div>
+        <div class="cold-md-6 error">
+            <h1>D'oh!</h1>
+            <h3>Something went wrong, I guess</h3>
+            <h4><a>@Html.ActionLink("Go back Home", "News", "Home")</a></h4>
+        </div>
+
+    </div>
+</body>
+</html>

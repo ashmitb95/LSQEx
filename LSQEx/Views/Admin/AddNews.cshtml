@@ -1,0 +1,96 @@
+﻿@model LSQEx.Models.AddNewsModel
+
+@{
+    ViewBag.Title = "AddNews";
+    Layout = "~/Views/Shared/_DetailsLayout.cshtml";
+}
+
+@if (Model.CanAddNews)
+{
+    if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    using (Html.BeginForm("AddNews", "Admin", FormMethod.Post))
+    {
+
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal" id="News">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewsModel.Category, htmlAttributes: new { @class = "control-label col-md-2 addnewslabel" })
+                @Html.DropDownListFor(model => model.Category, Model.Categories, "Select Category", "Name")
+                @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger addnewserror" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewsModel.Headline, htmlAttributes: new { @class = "control-label col-md-2 addnewslabel" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.NewsModel.Headline, new { htmlAttributes = new { @class = "form-control", @name = "Headline"} })
+                    @Html.ValidationMessageFor(model => model.NewsModel.Headline, "", new { @class = "text-danger addnewserror" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewsModel.Source, htmlAttributes: new { @class = "control-label col-md-2 addnewslabel" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.NewsModel.Source, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NewsModel.Source, "", new { @class = "text-danger addnewserror" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewsModel.Publish_Date, htmlAttributes: new { @class = "control-label col-md-2 addnewslabel" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.NewsModel.Publish_Date, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model=>model.NewsModel.Publish_Date, "", new { @class = "text-danger addnewserror" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewsModel.Text, htmlAttributes: new { @class = "control-label col-md-2 addnewslabel" })
+                <div class="col-md-6">
+                    @Html.TextAreaFor(model => model.NewsModel.Text, new { @class = "form-control", @rows = 10, @cols=5 })
+                    @Html.ValidationMessageFor(model => model.NewsModel.Text, "", new { @class = "text-danger addnewserror" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewsModel.Summary, htmlAttributes: new { @class = "control-label col-md-2 addnewslabel" })
+                <div class="col-md-6">
+                    @Html.TextAreaFor(model => model.NewsModel.Summary, new { @class = "form-control", @rows=5 })
+                    @Html.ValidationMessageFor(model => model.NewsModel.Summary, "", new { @class = "text-danger addnewserror" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewsModel.ImageURL, htmlAttributes: new { @class = "control-label col-md-2 addnewslabel" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.NewsModel.ImageURL, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NewsModel.ImageURL, "", new { @class = "text-danger addnewserror" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Add News" class="btn btn-default addnewsbutton" />
+                </div>
+            </div>
+        </div>
+    }
+
+    @*<button>
+        @Html.ActionLink("Back to Home", "News", "Home")
+    </button>*@
+
+}
+
+else
+{
+    @Html.Partial("Unauthorized", "Error");
+
+}
+
+
+

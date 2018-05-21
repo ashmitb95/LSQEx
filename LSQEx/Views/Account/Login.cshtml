@@ -1,0 +1,81 @@
+﻿@model LSQEx.Models.LoginModel
+<!DOCTYPE html>
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row form-row">
+            <div class="col-sm-7 image">
+                        <img class="loginimage" src="~/Content/img/lsqex_white_cropped.png" />
+                </div>
+            <div class="col-sm-4 col-centered login">
+                <div class="login-menu">
+                    @using (Html.BeginForm())
+
+    {
+                @Html.AntiForgeryToken()
+if (TempData["Success"] != null)
+{
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+}
+
+                <div class="form-horizontal" id="loginform">
+                    <img class="formimage" src="~/Content/img/lsqex_white_cropped.png" />
+                    <h4>Login to your LSQEx Account!</h4>
+                    <hr />
+                    <div>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group has-error">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "login-input", @placeholder = "Enter user name", @required = "required" } })
+                        <span class="bar"></span>
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger validationerror" })
+                    </div>
+
+                    <div class="form-group">
+
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "login-input", @placeholder = "Enter Password", @required = "required" } })
+                        <span class="bar"></span>
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger validationerror" })
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="btn btn-default form-control submit-button" />
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.RememberUser)
+                            @Html.Label("Keep me logged in", htmlAttributes: new { @class = "control-label" })
+                            @Html.ValidationMessageFor(model => model.RememberUser, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="login-footer">@Html.ActionLink("Register", "Register", "Account")</div>
+
+}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        $("#loginform").validate();
+    </script>
+
+</body>
+
+
+</html>

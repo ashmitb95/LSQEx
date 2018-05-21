@@ -1,0 +1,28 @@
+﻿@model IEnumerable<LSQEx.Models.NewsModel>
+@{
+//ViewBag.Title = "NewsCarouselFeed";
+}
+@{
+    var count = 1;
+
+    foreach (var item in Model)
+    {
+        if (count == 1)
+        {
+            <div class="item row active">
+
+                <img class="imagecontainer" src="@item.ImageURL">
+                <h4 class="textcontainer">@item.Headline</h4>
+            </div>
+        }
+        else
+        {
+            <div class="item row">
+                <img class="imagecontainer" src="@item.ImageURL">
+                <h4 class="textcontainer">@item.Headline</h4>
+                </div>
+            }
+        count++;
+        }
+    }
+

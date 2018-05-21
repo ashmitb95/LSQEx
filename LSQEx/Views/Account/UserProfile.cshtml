@@ -1,0 +1,112 @@
+﻿@model LSQEx.Models.UserModel
+
+@{
+    Layout = "~/Views/Shared/_DetailsLayout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/lsqexpress.css" rel="stylesheet" />
+    <title>UserProfile</title>
+</head>
+<body>
+
+    @if (Context.User.Identity.Name == Model.UserName)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 userdetails">
+                    <div>
+                        <h2 style="margin:30px">Profile Information</h2>
+                        <hr />
+                        <dl class="dl-horizontal">
+                            <dt class="profiledisplay">
+                                @Html.DisplayNameFor(model => model.UserName)
+                            </dt>
+
+                            <dd class="profiledetails" style="padding-top:19px">
+                                @Html.DisplayFor(model => model.UserName)
+                            </dd>
+
+                            <dt class="profiledisplay">
+                                @Html.DisplayNameFor(model => model.FirstName)
+                            </dt>
+
+                            <dd class="profiledetails">
+                                @Html.DisplayFor(model => model.FirstName)
+                            </dd>
+
+                            <dt class="profiledisplay">
+                                @Html.DisplayNameFor(model => model.LastName)
+                            </dt>
+
+                            <dd class="profiledetails">
+                                @Html.DisplayFor(model => model.LastName)
+                            </dd>
+
+                            <dt class="profiledisplay">
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+
+                            <dd class="profiledetails">
+                                @Html.DisplayFor(model => model.Email)
+                            </dd>
+
+                        </dl>
+                    </div>
+                    <div class="row">
+                        <button class="col-md-4 userButtons">
+                            @Html.ActionLink("Change Password", "ChangePassword", "Account", new { userName = HttpContext.Current.User.Identity.Name }, null)
+                        </button>
+                        <button class="col-md-4 userButtons">
+                            @Html.ActionLink("Edit Profile", "EditDetails", "Account", new { userName = Model.UserName }, null)
+                        </button>
+                        @if (Model.CanAddNews == true)
+    {
+                    <button class="col-md-4 userButtons">
+                        @Html.ActionLink("Add News", "AddNews", "Admin", new { userName = Model.UserName }, null)
+                    </button>
+
+
+}
+else
+{
+                    <button disabled="disabled" title="You do not have permission to add news" class="col-md-4 userButtons">
+                        @Html.ActionLink("Add News", "AddNews", "Admin", new { userName = Model.UserName }, new { @class = "linkdisabled", @title = "You do not have permission to add news" })
+                    </button>
+
+}
+                    </div>
+
+                </div>
+                <div class="col-md-4 Votes">
+                    <h2 style="margin:30px">Site Interactions</h2>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6 count">
+                            <h3>News articles upvoted</h3>
+                            <h4>@Model.Upvotes</h4>
+                        </div>
+                        <div class="col-md-6 count">
+                            <h3>News artcicles downvoted</h3>
+                            <h4>@Model.Downvotes</h4>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        
+
+    }
+    else
+    {
+        @Html.Partial("Unauthorized", "Error");
+
+    }
+
+</body>
+
+</html>

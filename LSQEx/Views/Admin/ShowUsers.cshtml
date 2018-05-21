@@ -1,0 +1,200 @@
+﻿@model IEnumerable<LSQEx.Models.UserModel>
+
+<head>
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <link href="~/Content/css/lsqexpress.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery-1.10.2.min.js"></script>
+</head>
+
+@*<div>
+
+    @foreach (var item in Model)
+    {
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName("User ID")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.UserID)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("User Name")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.UserName)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("First Name")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Last Name")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Email")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.Email)
+            </dd>
+        </dl>
+    }*@
+@if (Context.User.IsInRole("Administrator"))
+{
+<div>
+    <div class="search">
+        <input type="text" id="searchUser" name="searchUser" class="form-control" data-category="@ViewBag.Title" placeholder="Search by Username" />
+        @*<input type="button" id="searchButton" name="searchButton" value="Search" class="form-control" />*@
+    </div>
+    @if (Model.Count() > 0)
+    {
+        <h4>List of Users:</h4>
+        <hr />
+        if (TempData["Success"] != null)
+        {
+            <h3>@TempData["Success"]</h3>
+        }
+        <div class="table-responsive">
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>No.</th>
+                <th>User Name </th>
+                <th>First Name </th>
+                <th>Last Name </th>
+                <th>Email</th>
+                <th>Can Add News</th>
+                <th>Delete User</th>
+            </tr>
+            @{
+                var count = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@count</td>
+                        <td>@item.UserName</td>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td>@Html.CheckBoxFor(m => item.CanAddNews, new { @class = "form-control allowUser", data_ID=item.UserID })@Html.HiddenFor(m=> item.UserID)</td>
+                        <td>@Html.ActionLink("Delete", "DeleteUser", "Admin", new { userID = @item.UserID }, new { @class="deleteuser"})</td>
+                        
+                    </tr>
+                    count = count + 1;
+                }
+            }
+        </table>
+            </div>
+    }
+    else
+    {
+        <p>No Users Found</p>
+    }
+</div>
+                }
+                else
+                {
+                    @Html.Partial("Unauthorized", "Error");
+                }
+
+<script>
+    $('#searchUser').keydown(function (event) {
+        var key = event.which;
+        var stringlength = $('#searchUser').val().length;
+
+        if (key==13 &&stringlength > 3)  // the enter key code
+        {
+            
+            searchUsers();
+            return false;
+        }
+
+    });
+    function searchUsers() {
+        var text = $("#searchUser").val();
+        alert(text);
+        //var category = $('#searchUser').attr('data-category');
+        if (text == "") {
+            showNews.html("");
+            showNews.prepend('<div class="modal-header">Alert</div>');
+            showNews.append("<p>Search Query cannot be empty.<br/>");
+            modal.modal('show');
+        }
+
+        else {
+            //activeElement.removeClass("active");
+            //newsBody.fadeOut(0.001);
+            $.ajax(
+                {
+                    type: "GET",
+                    url: '../Admin/SearchUser',
+                    data: {
+                        'searchValue': text
+                        //
+                        //'page': 1
+                    },
+                    success: function (result) {
+
+                        alert(result);
+                        $("#UserResults").html(result);
+                        //$("#result-container").modal(show);
+                        //newsBody.fadeIn(1000);
+                        //newsBody.prepend('<p><span></span></p>')
+                        //newsBody.html(result);//.fadeIn("slow");
+
+
+                    },
+                    error: function (xhr) {
+                        //showNews.html("");
+                        //showNews.prepend('<div class="modal-header">Error</div>');
+                        //showNews.append("<p>Something went wrong.<br/> Please reload the page<p>");
+                        //modal.modal('show');
+                    }
+
+                });
+
+        }
+    };
+
+    $('.allowUser').click(function () {
+        var value = false;
+        if ($(this).is(":checked")) {
+            value = true;
+        }
+        var ID = $(this).attr('data-id');
+        //alert("clicked"+value+" "+ ID);
+        $.ajax(
+            {
+                type: "GET",
+                url: '../Admin/SetWriteAccess',
+                data: {
+                    'userID': ID,
+                    'toggleAccess':value
+                },
+                success: function (result) {
+                    alert("Write Access Changed");
+
+
+                },
+                error: function (xhr) {
+                }
+
+            });
+    })
+
+
+
+</script>

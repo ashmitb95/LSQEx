@@ -1,0 +1,33 @@
+﻿@model IEnumerable<LSQEx.Models.NewsModel>
+
+@{
+    ViewBag.Title = "SearchNews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title  Hello is this shown SearchNews</h2>
+
+<div>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>User Name </th>
+            <th>First Name </th>
+            <th>Last Name </th>
+            <th>Email</th>
+        </tr>
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Headline</td>
+                    <td>@item.Source</td>
+                    <td>@item.Summary</td>
+                    <td>@item.TimeAgo</td>
+                </tr>
+            }
+        }
+    </table>
+    <p>
+        @Html.ActionLink("Go Home", "News", "Home")
+    </p>
+    </div>

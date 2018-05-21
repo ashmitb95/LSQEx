@@ -1,0 +1,85 @@
+﻿@model LSQEx.Models.RegistrationModel
+
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row form-row">
+        <div class="col-sm-7 image">
+            <img class="loginimage" src="~/Content/img/lsqex_white_cropped.png" />
+            @*<h1>Create a new account and get started!</h1>*@
+        </div>
+        <div class="col-sm-4 col-centered login">
+
+            @using (Html.BeginForm())
+            {<form>
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal" id="registerform">
+                <div class="registerform">
+                    <img class="formimage" src="~/Content/img/lsqex_white_cropped.png" />
+                    <h4>Create an Account</h4>
+                    <hr/>
+                </div>
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "login-input", @placeholder = "Enter Username" } })
+                    <span class="bar"></span>
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger validationerror" })
+                </div>
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "login-input", @placeholder = "Enter Password" } })
+                    <span class="bar"></span>
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger validationerror" })
+                </div>
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "login-input", @placeholder = "Confirm Password" } })
+                    <span class="bar"></span>
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger validationerror" })
+                </div>
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "login-input", @placeholder = "Enter First Name" } })
+                    <span class="bar"></span>
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger validationerror" })
+                </div>
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "login-input", @placeholder = "Enter Last Name" } })
+                    <span class="bar"></span>
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger validationerror" })
+                </div>
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "login-input", @placeholder = "Enter Email Address" } })
+                    <span class="bar"></span>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger validationerror" })
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="Register" class="btn btn-default form-control submit-button" />
+                </div>
+            </div>
+            <div class="login-footer">@Html.ActionLink("Login", "Login", "Account")</div>
+        </form>
+            }
+        </div>
+    </div>
+</div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+
+    <script>
+        $("#registerform").validate({});
+    </script>

@@ -1,0 +1,219 @@
+﻿@model LSQEx.Models.HomeNewsModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="~/Content/js/jquery-1.10.2.min.js"></script>
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/lsqexpress.css" rel="stylesheet" />
+    <script src="~/Content/js/categories.js"></script>
+    <script src="~/Content/js/highlights.js"></script>
+    <script src="~/Content/js/likeArticle.js"></script>
+    <script src="~/Content/js/lsqExpress.js"></script>
+    <script src="~/Content/js/searchNews.js"></script>
+    <script src="~/Content/js/newsModal.js"></script>
+    
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header navbar-default">
+        <div class="container navbar-responsive">
+            <nav class="navbar" id="mobile-navbar">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-items">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="@Url.Action("News", "Home")">
+                            <img style="width: 150px;" src="~/Content/img/lsqex_white_cropped.png" alt="Leadsquared Express">
+                        </a>
+                    </div>
+                    @*<div class="date">@DateTime.Now.DayOfWeek , @DateTime.Now.Date.ToShortDateString() @DateTime.Now.TimeOfDay.Hours</div>*@
+                    <div id="nav-items" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                            @if (ViewBag.isNewsPage == true)
+                            {
+                                <li>
+                                    <div class="search">
+                                        <input type="text" id="searchVal" name="searchVal" class="form-control" data-category="@ViewBag.Title" placeholder="Search for a News Article" />
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-wrapper">
+                                        <div class="dropdown">
+                                            <div class="dropbtn">Filter Categories&#x25BE;</div>
+                                            <div class="dropdown-content show-menu-arrow">
+
+                                                @using (Html.BeginForm("FilterCategories", "Home", FormMethod.Post))
+                                                {
+                                                    <table>
+                                                        @for (int i = 0; i < Model.SelectList.Count(); i++)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    <label class="switch">
+                                                                        @Html.CheckBoxFor(m => Model.SelectList[i].Selected, new { @class = "form-control" })
+                                                                        <div class="slider round"></div>
+                                                                    </label>
+
+                                                                </td>
+                                                                <td>
+
+                                                                    <span class="control-label dropdown-text">@Html.DisplayFor(m => Model.SelectList[i].Text)</span>
+                                                                    @Html.HiddenFor(m => Model.SelectList[i].Value)
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                            <br />
+                                                            <input type="submit" value="Save" class="form-control form-button" />
+                                                }
+                                                @using (Html.BeginForm("ResetCategories", "Home", FormMethod.Post))
+                                                {
+                                                    <input type="submit" value="Reset" class="form-control form-button" />
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            }
+                            <li><div class="dropdown-wrapper">@Html.Partial("_LoginPartial")</div></li>
+                            <li>
+                                @Ajax.ActionLink("Home", "News", "Home", new AjaxOptions { UpdateTargetId = "target-body", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })
+                            </li>
+                            @if (ViewBag.isNewsPage == true)
+                            {
+                                foreach (var item in Model.NewsCategory)
+                                {
+                                    <li><a class="device-category" data-ID="@item.ID" data-category="@item.Name" data-page="1">@item.Name</a></li>
+                                }
+                            }
+                        </ul>
+
+                            </div>
+                        </div>
+                    </nav>
+
+                </div>
+            </div>
+            @if (ViewBag.IsNewsPage == true)
+            {
+                <nav class="categories" id="categories">
+                    <ul>
+
+
+                        <li class="active">
+                            @Ajax.ActionLink("Home", "News", "Home", new AjaxOptions { UpdateTargetId = "target-body", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @class = ".active" })
+
+                        </li>
+                        @foreach (var item in Model.NewsCategory)
+                        {
+                        <li><a class="categoryItem" data-category="@item.Name" data-ID="@item.ID" data-page="1">@item.Name</a></li>
+                        }
+
+                        @*else
+                            {
+                                <li>
+                                    @Ajax.ActionLink("Home", "News", "Home", new AjaxOptions { UpdateTargetId = "target-body", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @class = ".active" })
+
+                                </li>
+                            }*@
+                    </ul>
+                </nav>
+            }
+
+
+            @if (ViewBag.IsNewsPage == true)
+            {
+                <div class="ticker-container">
+                    <div class="ticker-wrap">
+                        <div class="ticker">
+                            @{
+                                Html.RenderAction("BreakingNews", "Home");
+
+                            }
+                        </div>
+                    </div>
+                </div>
+                                }
+            <div class="container body-content" id="body-content">
+                <div class="row main-container">
+
+                    <div class="col-md-3 highlights">
+                        @{if (ViewBag.IsNewsPage == true)
+                            {
+                                <h3 class="highlight-title"><span>Highlights</span></h3>
+                                if (ViewBag.IsNewsPage == true)
+                                {
+                                    Html.RenderAction("Highlights", "Highlights");
+                                }
+                                <h3 class="highlight-title" style="margin-top:30px;"><span>RSS Feed</span></h3>
+                                <div id="FeedCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                                    <div class="carousel-inner">
+                                        @{
+                                            Html.RenderAction("RSSFeed", "Home");
+
+                                        }
+                                    </div>
+                                    <a class="left carousel-control" href="#FeedCarousel" data-slide="prev">
+                                        <span class="icon-prev"></span>
+                                        @*<span class="rss">&#60;</span>*@
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#FeedCarousel" data-slide="next">
+                                        @*<span class="rss">&#62;</span>*@
+                                        <span class="icon-next"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+
+                                                }
+                                            }
+
+
+
+                                        <div class="advert-container">
+                                            <h3>Place Ad here</h3>
+                                        </div>
+                                        <div class="advert-container">
+                                            <h3>Place Ad here</h3>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-push-9" id="target-body">
+                                        @RenderBody()
+                                    </div>
+                                </div>
+                            </div>
+
+
+                                <hr />
+                                <footer>
+                                    <div class="footer-main navbar-fixed-bottom">
+                                        <ul>
+                                            <li>@Ajax.ActionLink("Blog", "Blog", "Home", new AjaxOptions { UpdateTargetId = "target-body", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</li>
+                                            @*<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                                        </ul>
+                                    </div>
+                                </footer>
+
+
+                                <script src="~/Content/js/bootstrap.min.js"></script>
+                                <script src="~/Content/js/multiSelect.js"></script>
+
+                    </body>
+</html>
+<script>
+
+    
+</script>

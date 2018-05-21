@@ -1,0 +1,203 @@
+﻿@model LSQEx.Models.HomeNewsModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home";
+
+}
+<h2 class="viewbag-title">@ViewBag.Title</h2>
+
+<div id="NewsCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <div class="carousel-inner">
+        <!-- Indicators -->
+        <!-- Wrapper for slides -->
+        <div class="item active">
+                    <img class="center-cropped" src="~/Content/img/Finance.jpg">
+                    <div class="carousel-caption">
+                        <h3 class="carouselItem" data-ID="3" data-category="Finance" data-page="1">Finance</h3>
+                        <h4>See more news on Finance</h4>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <img class="center-cropped" src="~/Content/img/World.jpg">
+                    <div class="carousel-caption">
+                        <h3 class="carouselItem" data-ID="1" data-category="World" data-page="1">World</h3>
+                        <h4>See more news from around the World</h4>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <a href="@Url.Action("Finance", "Categories")">
+                        <img class="center-cropped" src="~/Content/img/tech 450x150.jpg">
+                    </a>
+                    <div class="carousel-caption">
+                        <h3 class="carouselItem" data-ID="4" data-category="Tech" data-page="1">Tech</h3>
+                        <h4>See more news on the latest Technology</h4>
+                    </div>
+                </div>
+            </div>
+
+
+
+        @*@{
+            Html.RenderAction("NewsCarouselFeed", "Home");
+
+        }*@
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#NewsCarousel" data-slide="prev">
+        <span class="icon-prev"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#NewsCarousel" data-slide="next">
+        <span class="icon-next"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+@*<div id="NewsCarousel" class="carousel slide" data-ride="carousel">
+
+    <ol class="carousel-indicators">
+        <li data-target="#NewsCarousel" data-slide="prev" class="active"></li>
+        <li data-target="#NewsCarousel"></li>
+        <li data-target="#NewsCarousel" data-slide="next"></li>
+    </ol>
+    @*<div class="item active">
+            <img class="center-cropped" src="~/Content/img/doh.jpg">
+            <div class="carousel-caption">
+                <h3>Error</h3>
+            </div>
+        </div>
+        <div class="item">
+            <img class="center-cropped" src="~/Content/img/Homer accused.gif">
+            <div class="carousel-caption">
+                <h3>Accused</h3>
+            </div>
+    <div class="carousel-inner">
+            @{Html.RenderAction("NewsCarouselFeed", "Home");}
+        </div>
+       Left and right controls*@
+        @*<a class="left carousel-control" href="#NewsCarousel" data-slide="prev">
+            <span class="icon-prev"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#NewsCarousel" data-slide="next">
+            <span class="icon-next"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>*@
+   
+    <div id="news-section">
+
+        <div class="main_content floatleft row">
+            <div class="target-left floatleft">
+                <!-- Left News Column showing three elements at a time-->
+
+                @{var categoryCount = 1;
+                    foreach (var category in Model.NewsCategory)
+                    {
+
+                        var count = 1;
+
+
+                        <div class="single_target-left_wrapper section item_group">
+                            <div class="news-header">
+                                <h2 class="title">@category.Name</h2>
+                                <button class="btn btn-default more" data-ID="@category.ID" data-category="@category.Name" data-page="1">More...</button>
+                            </div>
+                            <div class="table-container">
+                                @foreach (var item in Model.AllNews)
+                                {
+                                    var IDName = "LikeCount" + item.ID;
+                                    var UpvoteBtn = "Upvotebtn" + item.ID;
+                                    var DownvoteBtn = "Downvotebtn" + item.ID;
+
+                                    if (item.Category == category.Name)
+                                    {
+
+                                        <div class="news-item-col news_item_span" data-ID="@item.ID" data-category="@item.CategoryID">
+                                            <div>
+                                                <div class="image-container">
+                                                    <img src="@item.ImageURL" alt="website template image">
+                                                    <div class="top-left">@item.AddedBy</div>
+
+                                                </div>
+                                                <div class="news-details">
+
+                                                    <h4>@item.Headline</h4>
+                                                    <span class="single_cat_left_content_meta"><span>@item.Source</span> |  @item.TimeAgo </span>
+                                                    <p>@item.Summary</p>
+                                                </div>
+                                            </div>
+                                            <div class="meta">
+
+                                                @if (item.HasCurrentUserLiked == true)
+                                                {
+                                                    <div class="col-xs-1 glyphicon glyphicon-chevron-up like-arrow blue" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="true" data-flag="true" id="@UpvoteBtn"></div>
+                                                    <div class="col-xs-10 likecount" id="@IDName" title="@item.UsersVoted voted on this">@item.VoteCount</div>
+                                                    <div class="col-xs-1 glyphicon glyphicon-chevron-down like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="false " data-flag="false" id="@DownvoteBtn"></div>
+                                                }
+                                                else if (item.HasCurrentUserLiked == false)
+                                                {
+                                                    <div class="col-xs-1 glyphicon glyphicon-chevron-up like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="true" data-flag="false" id="@UpvoteBtn"></div>
+                                                    <div class="col-xs-10 likecount" id="@IDName" title="@item.UsersVoted voted on this">@item.VoteCount</div>
+                                                    <div class="col-xs-1 glyphicon glyphicon-chevron-down like-arrow blue" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="false " data-flag="true" id="@DownvoteBtn"></div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-xs-1 glyphicon glyphicon-chevron-up like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="true" data-flag="false" id="@UpvoteBtn"></div>
+                                                    <div class="col-xs-10 likecount" id="@IDName" title="@item.UsersVoted voted on this">@item.VoteCount</div>
+                                                    <div class="col-xs-1 glyphicon glyphicon-chevron-down like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="false " data-flag="false" id="@DownvoteBtn"></div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        count++;
+
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                    if (count > 3)
+                                    {
+                                        break;
+                                    }
+
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                        categoryCount++;
+                        if (categoryCount > 3)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="returnresult">
+        <div id="newsmodal" class="modal fade newsmodal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div id="NewsModal">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closebtn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>

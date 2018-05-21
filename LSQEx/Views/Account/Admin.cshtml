@@ -1,0 +1,29 @@
+﻿@model LSQEx.Models.UserModel
+@{
+    Layout = "~/Views/Shared/_DetailsLayout.cshtml";
+  }
+
+    @if (Context.User.IsInRole("Administrator") && Context.User.Identity.Name == Model.UserName)
+    {
+<div class="admindetails">
+    <div>
+        <h1>Hello @Model.UserName</h1>
+    </div>
+    <div class="row">
+        <a class="btn btn-primary col-md-3 adminbutton" id="showusers" href="#" @*Url.Action("ShowUsers","Admin")*@>Show Users</a>
+        <a class="btn btn-primary col-md-3 adminbutton" id="addnews" href="@Url.Action("AddNews","Admin")">Add News</a>
+        <a class="btn btn-primary col-md-3 adminbutton" id="addcategory" href="@Url.Action("AddCategory","Admin")">Add Category</a>
+    </div>
+    
+    @*<button class="btn btn-default" id="showusers"></button>*@
+</div>
+    <div id="UserResults">
+
+    </div>
+
+        
+    }
+    else
+    {
+        @Html.Partial("Unauthorized", "Error");
+    }

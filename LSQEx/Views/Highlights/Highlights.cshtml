@@ -1,0 +1,34 @@
+﻿@model IEnumerable<LSQEx.Models.NewsModel>
+<div class="scroll-highlights">
+    <ul id="highlights-ticker">
+        @foreach (var item in Model)
+        {
+            <li class="highlightItem" data-Highlight-ID="@item.ID" data-Highlight-category="@item.CategoryID" data-toggle="modal">
+                <div class="row">
+                    <h4 class="media-heading">@item.Headline</h4>
+                </div>
+                <div class="row">
+                    <p><small><i>@item.TimeAgo</i></small></p>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+
+<div id="showresult">
+    <div id="modal" class="modal fade Highlightsmodal" data-backdrop="static" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div id="highlightsModal">
+
+                </div>
+                <div class="modal-footer">
+
+                    <button id="closebtn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

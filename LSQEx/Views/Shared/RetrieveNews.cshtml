@@ -1,0 +1,35 @@
+﻿@model LSQEx.Models.NewsModel
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title" id="title">@(Model.Category ?? "Highlights")</h4>
+</div>
+
+
+<div class="modal-body" id="newsbody">
+    <h3>@Model.Headline</h3>
+    <p>@Model.Source | @Model.TimeAgo</p>
+    <p>@Model.Text</p><br />
+</div>
+
+@*<div id="newsmodal" class="modal fade newsmodal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="title">@Model.Category</h4>
+                </div>
+                <div class="modal-body" id="newsbody">
+                    <h3>@Model.Headline</h3>
+                    <p>@Model.Source | @Model.TimeAgo</p>
+                    <br/>
+                    <p>@Model.Text</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="closebtn"type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>*@

@@ -1,0 +1,121 @@
+﻿@model  LSQEx.Models.PageModel
+
+<head>
+    <script src="~/Content/js/newsModal.js"></script>
+    <script src="~/Content/js/likeArticle.js"></script>
+    <script src="~/Content/js/pagination.js"></script>
+    <script src="~/Content/js/searchNews.js"></script>
+</head>
+<h2 class="viewbag-title">@ViewBag.Title</h2>
+@if (Model.News.Count() > 0)
+{
+    var category = 0;
+    var categoryName = "";
+    <div class="news-container">
+        @foreach (var item in Model.News)
+        {
+            category = Convert.ToInt32(item.CategoryID);
+            categoryName = item.Category;
+            var IDName = "LikeCount" + item.ID;
+            var UpvoteBtn = "Upvotebtn" + item.ID;
+            var DownvoteBtn = "Downvotebtn" + item.ID;
+            <div class="news-item-col news_item_span floatleft" data-ID="@item.ID" data-category="@item.CategoryID">
+                <div class="image-container">
+                    <img src="@item.ImageURL">
+                    <div class="top-left">@item.AddedBy</div>
+                </div>
+                <div class="news-details">
+                    <h4>@item.Headline</h4>
+                    <span class="single_cat_left_content_meta"><span>@item.Source</span> |  @item.TimeAgo</span>
+                    <p> @item.Summary </p>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        @if (item.HasCurrentUserLiked == true)
+                        {
+                            <div class="col-xs-1 glyphicon glyphicon-chevron-up like-arrow blue" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="true" data-flag="true" id="@UpvoteBtn"></div>
+                            <div class="col-xs-10 likecount" id="@IDName" title="@item.UsersVoted voted on this">@item.VoteCount</div>
+                            <div class="col-xs-1 glyphicon glyphicon-chevron-down like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="false " data-flag="false" id="@DownvoteBtn"></div>
+                        }
+                        else if (item.HasCurrentUserLiked == false)
+                        {
+                            <div class="col-xs-1 glyphicon glyphicon-chevron-up like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="true" data-flag="false" id="@UpvoteBtn"></div>
+                            <div class="col-xs-10 likecount" id="@IDName" title="@item.UsersVoted voted on this">@item.VoteCount</div>
+                            <div class="col-xs-1 glyphicon glyphicon-chevron-down like-arrow blue" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="false " data-flag="true" id="@DownvoteBtn"></div>
+                        }
+                        else
+                        {
+                            <div class="col-xs-1 glyphicon glyphicon-chevron-up like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="true" data-flag="false" id="@UpvoteBtn"></div>
+                            <div class="col-xs-10 likecount" id="@IDName" title="@item.UsersVoted voted on this">@item.VoteCount</div>
+                            <div class="col-xs-1 glyphicon glyphicon-chevron-down like-arrow" data-NewsID="@item.ID" data-CategoryID="@item.CategoryID" data-upvote="false " data-flag="false" id="@DownvoteBtn"></div>
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <br />
+    <div class="text-center">
+        <ul class="pagination pagination-sm text-center">
+            @{
+                var NextPage = Model.CurrentPage + 1;
+                var PrevPage = Model.CurrentPage - 1;
+                if (PrevPage > 0)
+                {
+                    <li><a href="#" class="pageClick" data-page="@PrevPage" data-categoryName="@categoryName" data-category="@category">Prev</a></li>
+                }
+
+                for (int i = 1; i <= Model.PageCount; i++)
+                {
+
+                    if (i != Model.CurrentPage)
+                    {
+                        <li><a href="#" class="pageClick" data-page="@i" data-categoryName="@categoryName" data-category="@category">@i</a></li>
+                    }
+                    else
+                    {
+                        <li class="active disabled blue"><a class="disabled" href="#">@i</a></li>
+                    }
+                }
+                if (NextPage <= Model.PageCount)
+                {
+                    <li><a href="#" class="pageClick" data-page="@NextPage" data-categoryName="@categoryName" data-category="@category">Next</a></li>
+                }
+
+            }
+        </ul>
+    </div>
+
+
+
+}
+else
+{
+    <div class="news-container">
+        <p><span>No records found</span>@*<span class="capitalize">@ViewBag.Title</span>*@</p>
+    </div>
+}
+
+<div id="returnresult">
+    <div id="newsmodal" class="modal fade newsmodal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div id="NewsModal">
+
+                </div>
+                <div class="modal-footer">
+
+                    <button id="closebtn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
